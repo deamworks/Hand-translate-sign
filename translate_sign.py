@@ -3,11 +3,11 @@ import mediapipe as mp
 import numpy as np
 import joblib  # โหลดโมเดล
 
-# ✅ โหลดโมเดล KNN
+# โหลดโมเดล KNN
 model = joblib.load("hand_sign_model.pkl")
-label_names = ["1","2","3"]
+label_names = ["1","2","3","4","5"]
 
-# ✅ ตั้งค่า Mediapipe
+# ตั้งค่า Mediapipe
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
@@ -27,10 +27,10 @@ while cap.isOpened():
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
-            # ✅ ดึงค่าตำแหน่งมือ
+            # ดึงค่าตำแหน่งมือ
             landmark_list = [lm.x for lm in hand_landmarks.landmark] + [lm.y for lm in hand_landmarks.landmark]
 
-            # ✅ ทำนายผลลัพธ์
+            # ทำนายผลลัพธ์
             if len(landmark_list) == model.n_features_in_:
                 prediction = model.predict([landmark_list])
                 predicted_text = label_names[prediction[0]]
